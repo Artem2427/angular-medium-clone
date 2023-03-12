@@ -11,13 +11,25 @@ export class PersistanceService {
   }
 
   get<T>(key: string): T | null {
+    const data: unknown = localStorage.getItem(key);
+
+    if (!data) return null;
+
+    let obj: T | null;
     try {
-      return JSON.parse(key) as T;
+      obj = JSON.parse(data.toString()) as T;
     } catch (error) {
-      console.log('Error getting data from localStorage', error);
-      return null;
+      obj = null;
     }
+
+    return obj;
   }
 
-  // TODO
+  remove(key: string) {
+    localStorage.removeItem(key);
+  }
+
+  clear() {
+    localStorage.clear();
+  }
 }
